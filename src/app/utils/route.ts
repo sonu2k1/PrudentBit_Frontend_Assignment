@@ -1,4 +1,6 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+// utils/route.ts
+
+const BASE_URL = "https://assign.immunefile.com";
 
 export const API_ROUTES = {
   patients: `${BASE_URL}/api/patients`,

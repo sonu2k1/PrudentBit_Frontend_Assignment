@@ -8,8 +8,6 @@ import { usePathname } from "next/navigation";
 type NavbarProps = {
   onSearchChange?: (search: string) => void;
   onSortChange?: (sort: string) => void;
-  activeView: string;
-  onViewChange?: (view: string) => void;
   filters?: string[];
   setFilters?: (filters: string[]) => void;
   totalPatients?: number;
@@ -18,13 +16,14 @@ type NavbarProps = {
 export default function Navbar({
   onSearchChange,
   onSortChange,
-  activeView,
-  onViewChange,
   filters = [],
   setFilters = () => {},
   totalPatients = 0,
 }: NavbarProps) {
   const pathname = usePathname();
+  const isTableView = pathname.includes("/tableview");
+  const isCardView = pathname.includes("/cardview");
+
   const [search, setSearch] = useState("");
   const [sortOptions] = useState(["Name", "Age", "Date", "Status"]);
   const [selectedSort, setSelectedSort] = useState("Name");
@@ -40,14 +39,10 @@ export default function Navbar({
     onSortChange?.(option);
   };
 
-  const handleViewChange = (view: string) => {
-    onViewChange?.(view);
-  };
-
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       onSearchChange?.(search);
-    }, 500);
+    }, 400);
     return () => clearTimeout(delayDebounce);
   }, [search]);
 
@@ -75,24 +70,24 @@ export default function Navbar({
       <div className="p-6 space-y-4">
         {/* Tabs */}
         <div className="flex space-x-4 border-b">
-          <Link href="/tableview" onClick={() => handleViewChange("tableview")}>
+          <Link href="/tableview">
             <button
-              className={`pb-2 text-sm font-medium transition-colors ${
-                activeView === "tableview"
-                  ? "text-blue-600 border-b-2 border-blue-600"
-                  : "text-gray-500 hover:text-gray-700"
+              className={`pb-2 text-sm font-medium transition-colors border-b-2 ${
+                isTableView
+                  ? "text-blue-600 border-blue-600"
+                  : "text-gray-500 border-transparent hover:text-gray-700"
               }`}
             >
               Table View
             </button>
           </Link>
 
-          <Link href="/cardview" onClick={() => handleViewChange("cardview")}>
+          <Link href="/cardview">
             <button
-              className={`pb-2 text-sm font-medium transition-colors ${
-                activeView === "cardview"
-                  ? "text-blue-600 border-b-2 border-blue-600"
-                  : "text-gray-500 hover:text-gray-700"
+              className={`pb-2 text-sm font-medium transition-colors border-b-2 ${
+                isCardView
+                  ? "text-blue-600 border-blue-600"
+                  : "text-gray-500 border-transparent hover:text-gray-700"
               }`}
             >
               Card View
@@ -129,7 +124,7 @@ export default function Navbar({
             </div>
           </div>
 
-          {/* Sort By Dropdown */}
+          {/* Sort Dropdown */}
           <div className="flex items-center gap-2 relative">
             <span className="text-sm text-blue-600 font-medium">Sort by:</span>
             <div className="relative">
@@ -138,7 +133,11 @@ export default function Navbar({
                 className="px-3 py-1 border rounded text-sm flex items-center gap-1 hover:bg-gray-100 min-w-[80px] justify-between"
               >
                 {selectedSort}
-                <span className={`transform transition-transform ${showSortDropdown ? "rotate-180" : ""}`}>
+                <span
+                  className={`transform transition-transform ${
+                    showSortDropdown ? "rotate-180" : ""
+                  }`}
+                >
                   ⬇️
                 </span>
               </button>

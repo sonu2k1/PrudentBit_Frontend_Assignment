@@ -1,7 +1,7 @@
 # PrudentBit_Frontend_Assignment
 # 🏥 Patient Management App
 
-h3 align="center"><a href=""><strong>Want to see live preview »</strong></a></h3>
+<h3 align="center"><a href=""><strong>Want to see live preview »</strong></a></h3>
 
 A single-page web application built with **Next.js**, **TypeScript**, and **TailwindCSS**, designed to consume a mock patient API for displaying and managing patient data. 
 
